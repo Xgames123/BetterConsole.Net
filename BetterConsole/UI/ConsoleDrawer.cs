@@ -4,6 +4,9 @@ using System.Threading;
 
 namespace BetterConsole.UI
 {
+	/// <summary>
+	/// A class used for drawing UI to the console
+	/// </summary>
 	public static class ConsoleDrawer
 	{
 

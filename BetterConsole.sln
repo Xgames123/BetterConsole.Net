@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterConsole", "BetterConsole\BetterConsole.csproj", "{F5648972-D76F-42F7-8C56-5736208F1E36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetterConsole", "BetterConsole\BetterConsole.csproj", "{F5648972-D76F-42F7-8C56-5736208F1E36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", "{70406289-056F-4F97-A637-26A612A10C2D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{F5648972-D76F-42F7-8C56-5736208F1E36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5648972-D76F-42F7-8C56-5736208F1E36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5648972-D76F-42F7-8C56-5736208F1E36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70406289-056F-4F97-A637-26A612A10C2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70406289-056F-4F97-A637-26A612A10C2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70406289-056F-4F97-A637-26A612A10C2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70406289-056F-4F97-A637-26A612A10C2D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
