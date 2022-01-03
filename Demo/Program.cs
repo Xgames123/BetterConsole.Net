@@ -1,6 +1,6 @@
 ﻿using System;
 using BetterConsole;
-using BetterConsole.UI;
+using Demo.Commands;
 
 namespace Demo
 {
@@ -8,7 +8,9 @@ namespace Demo
 	{
 		static void Main(string[] args)
 		{
-			Command.RunCommand(args, new SayMessageCommand());
+			var commands = new Command[] { new SayMessageCommand(), new DemoCommand() };
+
+			Command.RunCommand(args, helpCommand:new DefaultHelpCommand(commands), commands);
 
 
 			Console.ReadKey();

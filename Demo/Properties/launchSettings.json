@@ -2,7 +2,7 @@
   "profiles": {
     "Demo": {
       "commandName": "Project",
-      "commandLineArgs": "say:hi this is text"
+      "commandLineArgs": "demo ui"
     }
   }
 }

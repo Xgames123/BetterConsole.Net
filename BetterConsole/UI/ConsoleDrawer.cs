@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace BetterConsole.UI
@@ -218,15 +219,59 @@ namespace BetterConsole.UI
 		}
 
 		/// <summary>
+		/// Draws a number that the user can edit and returns the modified number
+		/// </summary>
+		/// <returns>The number that the user modified</returns>
+		public static int DrawNumberInput(int startNumber, bool canBeNegative=true, CancellationToken cancellationToken=default)
+		{
+			int outNum = -1;
+			while (true)
+			{
+				string newNum = DrawTextInput(startNumber.ToString(), cancellationToken, true, charValidator: (char Char) => { return char.IsDigit(Char); });
+				if (newNum == "")
+				{
+					return -1;
+				}
+				
+				if (int.TryParse(newNum, out outNum))
+				{
+					if (canBeNegative)
+					{
+						break;
+					}
+					else
+					{
+						if (outNum > 0)
+						{
+							break;
+						}
+
+					}
+
+					
+				}
+			}
+			return outNum;
+
+
+		}
+
+
+
+		/// <summary>
 		/// Draws text that the user can edit and returns the modified text
 		/// </summary>
-		/// <param name="startText">the text to start</param>
+		/// <param name="charValidator">If the lambda returns true than the char is printed else it is skipped</param>
 		/// <returns>The text that the user modified</returns>
-		public static string DrawTextInput(string startText, CancellationToken cancellationToken)
+		public static string DrawTextInput(string startText, CancellationToken cancellationToken, bool startCursorAtEnd=false, Func<char, bool> charValidator=null)
 		{
 			(int startX, int startY) = Console.GetCursorPosition();
 
 			int cursorPos = 0;
+			if (startCursorAtEnd)
+			{
+				cursorPos = startText.Length;
+			}
 			List<char> chars = new List<char>();
 			chars.AddRange(startText.ToCharArray());
 			while (true)
@@ -259,7 +304,7 @@ namespace BetterConsole.UI
 				{
 					if (cancellationToken.IsCancellationRequested)
 					{
-						ClearRect(startX, startY, chars.Count, 1);
+						ClearRect(startX, startY, chars.Count+2, 1);
 						Console.SetCursorPosition(startX, startY);
 						return new string(chars.ToArray());
 					}
@@ -279,7 +324,7 @@ namespace BetterConsole.UI
 				}
 				else if (keyInfo.Key == ConsoleKey.Enter)
 				{
-					ClearRect(startX, startY, chars.Count, 1);
+					ClearRect(startX, startY, chars.Count+2, 1);
 					Console.SetCursorPosition(startX, startY);
 					return new string(chars.ToArray());
 				}
@@ -293,6 +338,15 @@ namespace BetterConsole.UI
 				}
 				else if (!char.IsControl(keyInfo.KeyChar))
 				{
+					if (charValidator != null)
+					{
+						if (!charValidator.Invoke(keyInfo.KeyChar))
+						{
+							continue;
+						}
+
+					}
+
 					chars.Insert(cursorPos, keyInfo.KeyChar);
 					cursorPos++;
 				}
