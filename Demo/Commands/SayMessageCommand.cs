@@ -16,7 +16,7 @@ namespace Demo.Commands
 			new ArgumentDescriptor("message", "The message to print", isPositional:true),
 			new ArgumentDescriptor("color", "The color of the message", "White")};
 
-		public override void OnExecute(Argument[] args)
+		protected override void OnExecute(Argument[] args)
 		{
 			var messageArg = args[0];
 			var colorArg = args[1];

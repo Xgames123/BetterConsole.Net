@@ -18,7 +18,7 @@ namespace Demo.Commands
 			new ArgumentDescriptor("demoName", "The demo to load", isPositional:true)
 		};
 
-		public override void OnExecute(Argument[] args)
+		protected override void OnExecute(Argument[] args)
 		{
 			var demoName = args[0];
 			

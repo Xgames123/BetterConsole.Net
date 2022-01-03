@@ -178,7 +178,7 @@ namespace BetterConsole
 		}
 
 
-		public abstract void OnExecute(Argument[] args);
+		protected abstract void OnExecute(Argument[] args);
 
 
 

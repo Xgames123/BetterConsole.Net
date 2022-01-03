@@ -23,7 +23,7 @@ namespace BetterConsole
 		}
 
 
-		public override void OnExecute(Argument[] args)
+		protected override void OnExecute(Argument[] args)
 		{
 			foreach (var command in Commands)
 			{

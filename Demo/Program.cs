@@ -6,11 +6,12 @@ namespace Demo
 {
 	internal class Program
 	{
+		public static Command[] Commands = new Command[] { new SayMessageCommand(), new DemoCommand() };
+
 		static void Main(string[] args)
 		{
-			var commands = new Command[] { new SayMessageCommand(), new DemoCommand() };
 
-			Command.RunCommand(args, helpCommand:new DefaultHelpCommand(commands), commands);
+			Command.RunCommand(args, helpCommand:new DefaultHelpCommand(Commands), Commands);
 
 
 			Console.ReadKey();

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using BetterConsole.UI;
+using BetterConsole;
 
 namespace Demo
 {
@@ -16,7 +17,7 @@ namespace Demo
 		{
 			while (true)
 			{
-				var answer = ConsoleDrawer.DrawMenu(MenuSize, "This is a menu", CancellationToken.None, "Settings", "Option 1", "Option 2", "Exit");
+				var answer = ConsoleDrawer.DrawMenu(MenuSize, "This is a menu", CancellationToken.None, "Settings", "Option 1", "Option 2", "Help screen", "Exit");
 				switch (answer)
 				{
 					case -1:
@@ -31,6 +32,9 @@ namespace Demo
 						Console.WriteLine("This is Option 2 printed using Console.WriteLine");
 						break;
 					case 3:
+						new DefaultHelpCommand(Program.Commands).Execute(Array.Empty<Argument>());
+						break;
+					case 4:
 						return;
 
 				}
