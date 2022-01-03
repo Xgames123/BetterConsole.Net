@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Demo.Commands
 {
-	public class DemoCommand : Command
+	public class ShowCommand : Command
 	{
-		public override string Name => "demo";
+		public override string Name => "show";
 
 		public override string Discription => "Command for loading a demo";
 
