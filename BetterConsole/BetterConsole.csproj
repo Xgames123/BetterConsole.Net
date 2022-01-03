@@ -2,17 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <PackageProjectUrl></PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Xgames123/BetterConsole.Net</PackageProjectUrl>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/Xgames123/BetterConsole.Net</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Company>XGames</Company>
     <Authors>XGames</Authors>
-    <PackageId>BetterConsole.Net</PackageId>
+    <PackageId>XGames.BetterConsole.Net</PackageId>
     <Description>BetterConsole is a parser for comandline arguments
 and to display ui in the console</Description>
     <PackageTags>Console;ConsoleUI;comandline Argument Parser;comandline; argument parser;BetterConsole; drawing to console;args parser;console commands;commands;user interface console;ConsoleGUI</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
