@@ -12,35 +12,6 @@ namespace BetterConsole
 	public static class CommandParser
 	{
 
-		/// <summary>
-		/// Finds which command is used and returns it and its arguments
-		/// </summary>
-		/// <param name="args"></param>
-		/// <param name="commands"></param>
-		/// <returns></returns>
-		public static (Command, Argument[]) Parse(string[] args, params Command[] commands)
-		{
-			if (args.Length == 0)
-			{
-				return (null, Array.Empty<Argument>());
-			}
-
-			foreach (Command command in commands)
-			{
-				if (args[0] == command.Name)
-				{
-					string[] commandArgs = new string[args.Length - 1];
-					Array.Copy(args, 1, commandArgs, 0, commandArgs.Length);
-					ExecuteCommandFromArgs(command, commandArgs);
-
-					return command;
-				}
-
-			}
-
-		}
-
-
 
 
 		/// <summary>
