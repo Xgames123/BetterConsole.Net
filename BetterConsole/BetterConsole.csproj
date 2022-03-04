@@ -1,30 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <PackageProjectUrl>https://github.com/Xgames123/BetterConsole.Net</PackageProjectUrl>
-    <PackageIcon>Icon.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/Xgames123/BetterConsole.Net</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <Company>XGames</Company>
-    <Authors>XGames</Authors>
-    <PackageId>XGames.BetterConsole.Net</PackageId>
-    <Description>BetterConsole is a parser for comandline arguments
-and to display ui in the console</Description>
-    <PackageTags>Console;ConsoleUI;comandline Argument Parser;comandline; argument parser;BetterConsole; drawing to console;args parser;console commands;commands;user interface console;ConsoleGUI</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-  </PropertyGroup>
+	<PropertyGroup>
+		<BetterConsoleAuthors>XGames105</BetterConsoleAuthors>
+		<BetterConsoleVersion>2.0.0.0</BetterConsoleVersion>
+
+	</PropertyGroup>
+	
+	
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<PackageProjectUrl>https://github.com/Xgames123/BetterConsole.Net</PackageProjectUrl>
+		<PackageIcon>Icon.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/Xgames123/BetterConsole.Net</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageId>XGames.BetterConsole.Net</PackageId>
+		<Description>
+			BetterConsole is a parser for comandline arguments
+			and to display ui in the console
+		</Description>
+		<PackageTags>Console;ConsoleUI;comandline Argument Parser;comandline; argument parser;BetterConsole; drawing to console;args parser;console commands;commands;user interface console;ConsoleGUI</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		
+		<Company>$(BetterConsoleAuthors)</Company>
+		<Authors>$(BetterConsoleAuthors)</Authors>
+		
+		<Version>$(BetterConsoleVersion)</Version>
+		<FileVersion>$(BetterConsoleVersion)</FileVersion>
+		<AssemblyName>BetterConsoleV$(BetterConsoleVersion)</AssemblyName>
+		
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<DocumentationFile>$(IntermediateOutputPath)\BetterConsoleV$(BetterConsoleVersion).xml</DocumentationFile>
+	</PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\Assets\Icon.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+	<None Include="..\Assets\Icon.png">
+	  <Pack>True</Pack>
+	  <PackagePath>\</PackagePath>
+	</None>
+	<None Include="..\README.md">
+	  <Pack>True</Pack>
+	  <PackagePath>\</PackagePath>
+	</None>
   </ItemGroup>
 
 </Project>
