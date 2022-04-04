@@ -37,7 +37,7 @@ namespace BetterConsole.UI
 			{
 				Console.Write(" ");
 			}
-			Console.SetCursorPosition(x, y);
+			Console.SetCursorPosition(x, y-1);
 
 		}
 
