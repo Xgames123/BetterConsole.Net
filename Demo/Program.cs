@@ -6,7 +6,7 @@ namespace Demo
 	public class Program
 	{
 
-		private static int MenuSize = 30;
+		private static int MenuSize = 80;
 		private static string DummyTextInput = "This is editable text";
 
 
@@ -15,13 +15,18 @@ namespace Demo
 			while (true)
 			{
 				ConsoleDrawer.PushLabel("hi this is a label");
-
-				ConsoleDrawer.BeginTable(50, "Ip Address", "Name", "Score");
+				var usedSpace = (MenuSize / 4) + (MenuSize / 2);
+				ConsoleDrawer.BeginTable(ConsoleColor.White, ("Name", MenuSize/4), ("Date", MenuSize / 2), ("Number", MenuSize - usedSpace));
+				ConsoleDrawer.TableRow("name 0", "Tuesday, July 2, 2022", "0");
+				ConsoleDrawer.TableRow("name 1", "Tuesday, July 20, 2022", "1000");
+				ConsoleDrawer.TableRow("name 2", "Tuesday, June 3, 2019", "892703");
+				ConsoleDrawer.TableRow("name 3", "Friday, June 3, 2019", "-30388");
+				ConsoleDrawer.TableRow("name 4");
 				ConsoleDrawer.EndTable();
 
 				var answer = ConsoleDrawer.DrawMenu(MenuSize, "This is a menu", CancellationToken.None, "Settings", "Option 1", "Option 2", "Exit");
-	
-				ConsoleDrawer.Pop(2);
+
+				ConsoleDrawer.PopAll();
 				switch (answer)
 				{
 					case -1:

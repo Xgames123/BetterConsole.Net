@@ -23,17 +23,24 @@ namespace BetterConsole.UI
 		/// </summary>
 		/// <param name="size">Width of the table</param>
 		/// <param name="collumns">All collumns the table will contain</param>
-		public static void BeginTable(int size, params string[] collumns)
+		public static void BeginTable(ConsoleColor columnColor, params (string name, int size)[] collumns)
 		{
 			(int startx, int starty) = Console.GetCursorPosition();
 
-			int collumnSize = size / collumns.Length;
+			int width = 0;
 
 			//Draw top bar
+			width += 1;
 			Console.Write('╔');
+			if (collumns.Length > 0)
+			{
+				collumns[0].size -= 1;
+			}
+			
 			for (int i = 0; i < collumns.Length; i++)
 			{
-				DrawHorizontalLine(collumnSize-2, '═', addNewlineOnEnd:false);
+				width += (collumns[i].size);
+				DrawHorizontalLine(collumns[i].size-1, '═', addNewlineOnEnd:false);
 				Console.Write('╦');
 
 			}
@@ -45,8 +52,9 @@ namespace BetterConsole.UI
 			for (int i = 0; i < collumns.Length; i++)
 			{
 				Console.Write('║');
-				DrawTextCenterd(collumns[i], collumnSize);
-				
+				Console.ForegroundColor = columnColor;
+				DrawTextCenterd(collumns[i].name, collumns[i].size-1);
+				Console.ForegroundColor = ConsoleColor.White;
 			}
 			Console.Write('║');
 
@@ -55,7 +63,7 @@ namespace BetterConsole.UI
 			Console.Write('╠');
 			for (int i = 0; i < collumns.Length; i++)
 			{
-				DrawHorizontalLine(collumnSize - 2, '═', addNewlineOnEnd: false);
+				DrawHorizontalLine(collumns[i].size - 1, '═', addNewlineOnEnd: false);
 				Console.Write('╬');
 
 			}
@@ -63,7 +71,7 @@ namespace BetterConsole.UI
 			Console.Write('╣');
 			Console.Write('\n');
 
-			_currentTable = new UITable(startx, starty, size, 3, collumns, size);
+			_currentTable = new UITable(startx, starty, width, 3, collumns);
 			_beganTable = true;
 		}
 
@@ -73,7 +81,37 @@ namespace BetterConsole.UI
 		/// <param name="values"></param>
 		public static void TableRow(params string[] values)
 		{
+			if (!_beganTable)
+			{
+				throw new InvalidOperationException("BeginTable has to be called before TableRow");
+			}
 
+			_currentTable.Height += 1;
+
+
+
+			//Draw row
+			for (int i = 0; i < _currentTable.Collumns.Length; i++)
+			{
+				Console.Write('║');
+				var valueLen = 0;
+				if (values.Length > i)
+				{
+					valueLen = values[i].Length;
+					Console.Write(values[i]);
+				}
+				else
+				{
+					valueLen = 1;
+					Console.Write('/');
+				}
+				DrawHorizontalLine(_currentTable.Collumns[i].size - valueLen - 1, ' ', addNewlineOnEnd: false);
+
+			}
+			Console.Write('║');
+			Console.Write('\n');
+
+			
 		}
 
 
@@ -90,12 +128,11 @@ namespace BetterConsole.UI
 
 			_currentTable.Height += 1;
 
-			int collumnSize = _currentTable.Size / _currentTable.Collumns.Length;
 
 			Console.Write('╚');
 			for (int i = 0; i < _currentTable.Collumns.Length; i++)
 			{
-				DrawHorizontalLine(collumnSize - 2, '═', addNewlineOnEnd: false);
+				DrawHorizontalLine(_currentTable.Collumns[i].size - 1, '═', addNewlineOnEnd: false);
 				Console.Write('╩');
 
 			}
@@ -103,7 +140,7 @@ namespace BetterConsole.UI
 			Console.Write('╝');
 			Console.Write('\n');
 
-			_uiStack.Push(new UIStackEntry(_currentTable.StartX, _currentTable.StartY, _currentTable.Width+3, _currentTable.Height));
+			_uiStack.Push(new UIStackEntry(_currentTable.StartX, _currentTable.StartY, _currentTable.Width, _currentTable.Height));
 		}
 
 
@@ -161,6 +198,19 @@ namespace BetterConsole.UI
 			
 		}
 
+		/// <summary>
+		/// Removes all the ui entries that where drawn using Push
+		/// </summary>
+		public static void PopAll()
+		{
+			while(_uiStack.Count > 0)
+			{
+				var entry = _uiStack.Pop();
+				entry.Clear();
+			}
+
+		}
+
 
 		/// <summary>
 		/// Draw a yes or no dialog
@@ -197,7 +247,7 @@ namespace BetterConsole.UI
 				foreach (var line in titlesplit)
 				{
 					Console.Write('║');
-					DrawTextCenterd(line, size);
+					DrawTextCenterd(line, size-2);
 					Console.Write("║\n");
 					headerSize++;
 				}
@@ -215,7 +265,7 @@ namespace BetterConsole.UI
 						Console.ForegroundColor = ConsoleColor.Black;
 						Console.BackgroundColor = ConsoleColor.White;
 					}
-					DrawTextCenterd(options[i], size);
+					DrawTextCenterd(options[i], size-2);
 
 					Console.ResetColor();
 
@@ -317,7 +367,7 @@ namespace BetterConsole.UI
 			Console.BackgroundColor = backgroundColor;
 
 			Console.Write(startChar);
-			for (int i = 0; i < length; i++)
+			for (int i = 0; i < length-2; i++)
 			{
 				Console.Write(lineChar);
 			}
