@@ -11,34 +11,154 @@ namespace BetterConsole.UI
 	public static class ConsoleDrawer
 	{
 
-		private static Stack<int> LabelLengthStack = new Stack<int>();
+		private static Stack<UIStackEntry> _uiStack = new Stack<UIStackEntry>();
+
+		private static UITable _currentTable = default;
+		private static bool _beganTable = false;
 
 		/// <summary>
-		/// Draws a label to the console and removes it when you call PopLabel
+		/// Starts drawing a table
+		/// Call TableRow to add a row
+		/// Call EndTable to end the table
 		/// </summary>
-		public static void PushLabel(string label)
+		/// <param name="size">Width of the table</param>
+		/// <param name="collumns">All collumns the table will contain</param>
+		public static void BeginTable(int size, params string[] collumns)
 		{
-			LabelLengthStack.Push(label.Length);
+			(int startx, int starty) = Console.GetCursorPosition();
+
+			int collumnSize = size / collumns.Length;
+
+			//Draw top bar
+			Console.Write('╔');
+			for (int i = 0; i < collumns.Length; i++)
+			{
+				DrawHorizontalLine(collumnSize-2, '═', addNewlineOnEnd:false);
+				Console.Write('╦');
+
+			}
+			MoveConsoleCursor(-1, 0);
+			Console.Write('╗');
+			Console.Write('\n');
+
+			//Draw columns
+			for (int i = 0; i < collumns.Length; i++)
+			{
+				Console.Write('║');
+				DrawTextCenterd(collumns[i], collumnSize);
+				
+			}
+			Console.Write('║');
+
+			Console.Write('\n');
+			//Draw bottom bar
+			Console.Write('╠');
+			for (int i = 0; i < collumns.Length; i++)
+			{
+				DrawHorizontalLine(collumnSize - 2, '═', addNewlineOnEnd: false);
+				Console.Write('╬');
+
+			}
+			MoveConsoleCursor(-1, 0);
+			Console.Write('╣');
+			Console.Write('\n');
+
+			_currentTable = new UITable(startx, starty, size, 3, collumns, size);
+			_beganTable = true;
+		}
+
+		/// <summary>
+		/// Adds a row to the current table
+		/// </summary>
+		/// <param name="values"></param>
+		public static void TableRow(params string[] values)
+		{
+
+		}
+
+
+		/// <summary>
+		/// Ends drawing the table and pushes it to the UI stack
+		/// </summary>
+		public static void EndTable()
+		{
+			if (!_beganTable)
+			{
+				throw new InvalidOperationException("BeginTable has to be called before EndTable");
+			}
+			_beganTable = false;
+
+			_currentTable.Height += 1;
+
+			int collumnSize = _currentTable.Size / _currentTable.Collumns.Length;
+
+			Console.Write('╚');
+			for (int i = 0; i < _currentTable.Collumns.Length; i++)
+			{
+				DrawHorizontalLine(collumnSize - 2, '═', addNewlineOnEnd: false);
+				Console.Write('╩');
+
+			}
+			MoveConsoleCursor(-1, 0);
+			Console.Write('╝');
+			Console.Write('\n');
+
+			_uiStack.Push(new UIStackEntry(_currentTable.StartX, _currentTable.StartY, _currentTable.Width+3, _currentTable.Height));
+		}
+
+
+
+		/// <summary>
+		/// Draws a label to the console and removes it when you call Pop
+		/// </summary>
+		public static void PushLabel(string label, ConsoleColor foregroundColor=ConsoleColor.White, ConsoleColor backgroundColor=ConsoleColor.Black)
+		{
+			Console.ForegroundColor = foregroundColor;
+			Console.BackgroundColor = backgroundColor;
+
+			_uiStack.Push(new UIStackEntry(label.Length, 1));
 			Console.WriteLine(label);
+			Console.ResetColor();
 		}
 		/// <summary>
-		/// Removes the last label drawn using PushLabel()
+		/// Draws a label to the console and removes it when you call Pop
 		/// </summary>
-		public static void PopLabel()
+		public static void PushVerticalSpaceing(int amount)
 		{
-			int labelLength = LabelLengthStack.Pop();
+			_uiStack.Push(new UIStackEntry(1, amount));
+			for (int i = 0; i < amount; i++)
+			{
+				Console.Write('\n');
+			}
+			
+		}
 
+		/// <summary>
+		/// Uses Console.SetCursorPosition to move the cursor to an offset
+		/// </summary>
+		/// <param name="offsetX">Amount to move in x</param>
+		/// <param name="offsetY">Amount to move in y</param>
+		public static void MoveConsoleCursor(int offsetX, int offsetY)
+		{
 			(int x, int y) = Console.GetCursorPosition();
 
-			Console.SetCursorPosition(x, y - 1);
+			Console.SetCursorPosition(x+ offsetX, y+ offsetY);
+		}
 
-			Console.ForegroundColor = ConsoleColor.Black;
-			for (int i = 0; i < labelLength; i++)
+
+
+		/// <summary>
+		/// Removes the last ui entry that was drawn using Push
+		/// </summary>
+		/// <param name="count">Amount of entries to pop</param>
+		public static void Pop(int count=1)
+		{
+			for (int i = 0; i < count; i++)
 			{
-				Console.Write(" ");
+				var entry = _uiStack.Pop();
+				entry.Clear();
 			}
-			Console.SetCursorPosition(x, y-1);
-
+			
 		}
 
 
@@ -49,17 +169,13 @@ namespace BetterConsole.UI
 		/// <returns>false if the user selected no or if canceled else it returns true</returns>
 		public static bool DrawYesOrNo(int size, string title, CancellationToken cancellationToken)
 		{
-			switch (DrawMenu(size, title, cancellationToken, "No", "Yes"))
+			return DrawMenu(size, title, cancellationToken, "No", "Yes") switch
 			{
-				case -1:
-					return false;
-				case 0:
-					return false;
-				case 1:
-					return true;
-			}
-			return false;
-
+				-1 => false,
+				0 => false,
+				1 => true,
+				_ => false,
+			};
 		}
 
 		/// <summary>
@@ -182,18 +298,35 @@ namespace BetterConsole.UI
 		/// Draws a horizontal line
 		/// </summary>
 		/// <param name="length">Length of the line whiteout the start end and character</param>
+		/// <param name="character">The character to draw when drawing the line</param>
+		public static void DrawHorizontalLine(int length, char character, ConsoleColor foregroundColor = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black, bool addNewlineOnEnd=true)
+		{
+			DrawHorizontalLine(length, character, character, character, foregroundColor, backgroundColor, addNewlineOnEnd);
+		}
+
+		/// <summary>
+		/// Draws a horizontal line
+		/// </summary>
+		/// <param name="length">Length of the line whiteout the start end and character</param>
 		/// <param name="startChar">The character to draw before the line starts</param>
 		/// <param name="lineChar">The character to draw when drawing the line</param>
-		/// <param name="EndChar">The character to draw after the line</param>
-		public static void DrawHorizontalLine(int length, char startChar, char lineChar, char EndChar)
+		/// <param name="endChar">The character to draw after the line</param>
+		public static void DrawHorizontalLine(int length, char startChar, char lineChar, char endChar, ConsoleColor foregroundColor=ConsoleColor.White, ConsoleColor backgroundColor=ConsoleColor.Black, bool addNewlineOnEnd = true)
 		{
+			Console.ForegroundColor = foregroundColor;
+			Console.BackgroundColor = backgroundColor;
+
 			Console.Write(startChar);
 			for (int i = 0; i < length; i++)
 			{
 				Console.Write(lineChar);
 			}
-			Console.Write(EndChar);
-			Console.Write('\n');
+			Console.Write(endChar);
+			if (addNewlineOnEnd)
+			{
+				Console.Write('\n');
+			}
+			Console.ResetColor();
 		}
 
 		/// <summary>

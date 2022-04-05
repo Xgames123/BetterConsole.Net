@@ -14,7 +14,14 @@ namespace Demo
 		{
 			while (true)
 			{
-				var answer = ConsoleDrawer.DrawMenu(MenuSize, "This is a menu", CancellationToken.None, "Settings", "Push Label", "Pop Label", "Option 1", "Option 2", "Exit");
+				ConsoleDrawer.PushLabel("hi this is a label");
+
+				ConsoleDrawer.BeginTable(50, "Ip Address", "Name", "Score");
+				ConsoleDrawer.EndTable();
+
+				var answer = ConsoleDrawer.DrawMenu(MenuSize, "This is a menu", CancellationToken.None, "Settings", "Option 1", "Option 2", "Exit");
+	
+				ConsoleDrawer.Pop(2);
 				switch (answer)
 				{
 					case -1:
@@ -23,22 +30,15 @@ namespace Demo
 						DoSettings();
 						break;
 					case 1:
-						ConsoleDrawer.PushLabel("this is a pushed label");
-						break;
-					case 2:
-						ConsoleDrawer.PopLabel();
-						break;
-					case 3:
 						Console.WriteLine("This is Option 1 printed using Console.WriteLine");
 						break;
-					case 4:
+					case 2:
 						Console.WriteLine("This is Option 2 printed using Console.WriteLine");
 						break;
-					case 5:
+					case 3:
 						return;
 
 				}
-
 			}
 
 		}
