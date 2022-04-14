@@ -158,7 +158,7 @@ namespace BetterConsole.UI
 			Console.ResetColor();
 		}
 		/// <summary>
-		/// Draws a label to the console and removes it when you call Pop
+		/// Draws some vertical space to the console. You can remove it by calling pop
 		/// </summary>
 		public static void PushVerticalSpaceing(int amount)
 		{
